@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tweets>
+ <tweet>
+  <tweetid>142389495503925248</tweetid>
+  <user>ccifuentes</user>
+  <content><![CDATA[Salgo de #VeoTV , que día más largoooooo...]]></content>
+  <date>2011-12-02T00:47:55</date>
+  <lang>es</lang>
+  <sentiments>
+   <polarity><value>NONE</value><type>AGREEMENT</type></polarity>
+  </sentiments>
+  <topics>
+   <topic>otros</topic>
+  </topics>
+ </tweet>
+ <tweet>
+  <tweetid>142389933619945473</tweetid>
+  <user>CarmendelRiego</user>
+  <content><![CDATA[@PauladeLasHeras No te libraras de ayudar me/nos. Besos y gracias]]></content>
+  <date>2011-12-02T00:49:40</date>
+  <lang>es</lang>
+  <sentiments>
+   <polarity><value>NEU</value><type>DISAGREEMENT</type></polarity>
+   <polarity><entity>@PauladeLasHeras</entity><value>NEU</value><type>DISAGREEMENT</type></polarity>
+  </sentiments>
+  <topics>
+   <topic>otros</topic>
+  </topics>
+ </tweet>
+</tweets>
