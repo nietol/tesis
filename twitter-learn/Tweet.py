@@ -1,24 +1,25 @@
 """Modulo para manejo de tweets."""
 
+from enum import IntEnum
 from xml.etree import ElementTree
 from enum import Enum
 from text_processing import tokenize
 
 GLOBAL_ENTITY = "GLOBAL_ENTITY"
 
-class PolarityLevel(Enum):
+class PolarityLevel(IntEnum):
     """Niveles de polaridad."""
 
-    ninguno = 1
-    positivo = 2
-    negativo = 3
-    neutral = 4
+    ninguno = 0
+    positivo = 1
+    negativo = 2
+    neutral = 3
 
-class AgreementLevel(Enum):
+class AgreementLevel(IntEnum):
     """Niveles de acuerdo."""
 
-    agreement = 1
-    disagreement = 2
+    agreement = 0
+    disagreement = 1
 
 
 class Tweet:
@@ -42,7 +43,20 @@ class Tweet:
 
         tokenized_txt = tokenize(self.content)
         return tokenized_txt
-
+    
+    @property
+    def vector(self):
+        """Retorna la representación vectorizada del tweet."""
+        
+        return -1
+    
+    @property
+    def polarity(self):
+        """Retorna la polaridad asociada al tweet."""
+        
+        pol = [p for p in self.sentiments if p.entity == GLOBAL_ENTITY]        
+        return pol[0].polarity
+        
     def __str__(self):
         polarities = [[str(sentiment)] for sentiment in self.sentiments]
         return 'tweet id: {} \n content: {} \n polarities: {}'.format(self.tweet_id, self.content, polarities)
@@ -137,17 +151,19 @@ def create_tweets_from_xml(xml_file_path):
 
         sentiments = []
 
-        for p in tweet.find('sentiments'):
-            entity = p.find('entity').text if p.find('entity') is not None else GLOBAL_ENTITY
-            polarity_value = p.find('value').text
-            agreement_level = p.find('type').text
-            polarity = Polarity(entity, polarity_value, agreement_level)
-            sentiments.append(polarity)
+        if tweet.find('sentiments') != None:
+            for p in tweet.find('sentiments'):
+                entity = p.find('entity').text if p.find('entity') is not None else GLOBAL_ENTITY
+                polarity_value = p.find('value').text
+                agreement_level = p.find('type').text
+                polarity = Polarity(entity, polarity_value, agreement_level)
+                sentiments.append(polarity)
 
         topics = []
 
-        for t in tweet.find('topics'):
-            topics.append(t.text)
+        if tweet.find('topics') != None:
+            for t in tweet.find('topics'):
+                topics.append(t.text)
 
         if content is not None:
             tweet = Tweet(tweet_id, user, content, date, lang, sentiments, topics)
