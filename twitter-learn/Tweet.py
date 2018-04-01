@@ -155,7 +155,7 @@ def create_tweets_from_xml(xml_file_path):
             for p in tweet.find('sentiments'):
                 entity = p.find('entity').text if p.find('entity') is not None else GLOBAL_ENTITY
                 polarity_value = p.find('value').text
-                agreement_level = p.find('type').text
+                agreement_level = p.find('type').text if p.find('type') is not None else 'None'
                 polarity = Polarity(entity, polarity_value, agreement_level)
                 sentiments.append(polarity)
 

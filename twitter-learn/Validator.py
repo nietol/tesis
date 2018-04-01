@@ -48,13 +48,13 @@ class KFoldValidator:
         report = classification_report(y_test, y_pred, target_names=target_names)
         confusion = confusion_matrix(y_test, y_pred)
 
-
-        return report, confusion, grid.best_params_
+        return report, confusion, grid.best_params_, grid.best_estimator_
         
 if __name__ == "__main__":
     import sys
     from clasification import build_data_frame
     from clasification import build_model
+    from clasification import save_model
     from Tweet import create_tweets_from_xml
 
     xml_path = sys.argv[1]    
@@ -64,8 +64,12 @@ if __name__ == "__main__":
     model = build_model()
 
     kfold = KFoldValidator(model, df)    
-    report, confusion, params = kfold.gird_serach_cv()
+    report, confusion, params, best_estimator = kfold.gird_serach_cv()
 
     print(report)
     print(confusion)
     print('params: ', params)
+
+    kernel_value = params['classifier__kernel']
+    c_value = str(params['classifier__C'])
+    # save_model(best_estimator, 'MODELS/svm_model_' + kernel_value  + '_' + c_value)

@@ -5,6 +5,7 @@ from Tweet import create_tweets_from_xml
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC, SVC
+from sklearn.externals import joblib
 
 from text_processing import tokenize
 
@@ -40,23 +41,32 @@ def fit_model(tweets):
     model.fit(data_frame['tweet'].values, data_frame['polarity'].values)
     return model
 
+def save_model(model, file_name):
+    joblib.dump(model, file_name)
+
+def load_model(file_name):
+    return joblib.load(file_name)
+
 if __name__ == "__main__":
     import sys
+    from sklearn.metrics import classification_report, confusion_matrix    
     xml_path = sys.argv[1]
-    samples_path = sys.argv[2]
-    training_tweets = create_tweets_from_xml(xml_path)
-    samples_tweets = create_tweets_from_xml(samples_path)
-    
-    pd.set_option('display.max_colwidth', -1)
-    
-    model = fit_model(training_tweets)
-    samples = [t.content for t in samples_tweets]    
-    
-    # print(training_df.to_html())    
-    
-    predictions = model.predict(samples)
 
-    for i in range(len(predictions)):
-        print(str(samples_tweets[i].tweet_id) + ":" + str(predictions[i]))
+    tweets = create_tweets_from_xml(xml_path)
+    df = build_data_frame(tweets)
+    data = df['tweet'].values
+    target = df['polarity'].values
 
-    # print(predictions)
+    svm_model_estimator = load_model('MODELS/svm_model_linear_0.25')    
+    target_pred = svm_model_estimator.predict(data)
+
+    target_names = ['ninguno', 'positivo', 'negativo', 'neutral']
+    report = classification_report(target, target_pred, target_names=target_names)
+    confusion = confusion_matrix(target, target_pred)
+    
+    print(report)
+    print(confusion)
+
+
+
+    
