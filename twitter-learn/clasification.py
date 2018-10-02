@@ -48,6 +48,7 @@ def load_model(file_name):
     return joblib.load(file_name)
 
 if __name__ == "__main__":
+    '''
     import sys
     from sklearn.metrics import classification_report, confusion_matrix    
     xml_path = sys.argv[1]
@@ -56,8 +57,11 @@ if __name__ == "__main__":
     df = build_data_frame(tweets)
     data = df['tweet'].values
     target = df['polarity'].values
+    '''
+    svm_model_estimator = load_model('MODELS/svm_model_linear_0.25')
+    print(svm_model_estimator.named_steps['vectorizer'].tokenizer)
 
-    svm_model_estimator = load_model('MODELS/svm_model_linear_0.25')    
+    '''
     target_pred = svm_model_estimator.predict(data)
 
     target_names = ['ninguno', 'positivo', 'negativo', 'neutral']
@@ -66,7 +70,7 @@ if __name__ == "__main__":
     
     print(report)
     print(confusion)
-
+    '''
 
 
     
