@@ -1,5 +1,5 @@
 from enum import Enum, IntEnum
-from infraestructure.clasification.text_processing import tokenize
+from ..infraestructure.clasification.text_processing import tokenize
 
 class PolarityLevel(IntEnum):
     """Niveles de polaridad."""

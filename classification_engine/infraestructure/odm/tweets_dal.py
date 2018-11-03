@@ -23,7 +23,7 @@ def insert_one(tweet):
     return inserted_id
 
 if __name__ == "__main__":
-    from domain.Tweet import Tweet, PolarityLevel
+    from ...domain.Tweet import Tweet, PolarityLevel
     from datetime import datetime
 
     tweet = Tweet(1, 'usuario', 'contenido', datetime.now(), PolarityLevel.ninguno)
