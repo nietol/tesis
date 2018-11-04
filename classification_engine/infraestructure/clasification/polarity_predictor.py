@@ -1,7 +1,7 @@
 import os.path
 
 from sklearn.externals import joblib
-from text_processing import tokenize
+from ...domain.Tweet import PolarityLevel
 
 __ESTIMATOR__ = None
 
@@ -11,14 +11,16 @@ def predict(tweet_text):
     global __ESTIMATOR__
 
     if __ESTIMATOR__ is None:
-        __ESTIMATOR__ = load_model()
+        __ESTIMATOR__ = __load_model()
 
     content = [tweet_text]
     target_pred = __ESTIMATOR__.predict(content)
 
-    return target_pred
+    polarity = PolarityLevel(target_pred[0])
 
-def load_model():
+    return polarity
+
+def __load_model():
     base_path = os.path.abspath(os.path.dirname(__file__))
     file_name = os.path.join(base_path, "estimators/svm_model_linear_0.25")
     return joblib.load(file_name)

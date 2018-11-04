@@ -26,6 +26,6 @@ if __name__ == "__main__":
     from ...domain.Tweet import Tweet, PolarityLevel
     from datetime import datetime
 
-    tweet = Tweet(1, 'usuario', 'contenido', datetime.now(), PolarityLevel.ninguno)
+    tweet = Tweet(1, 'usuario', 'contenido', datetime.now(), PolarityLevel.ninguno, None)
     #print(tweet.to_dict())
     insert_one(tweet)

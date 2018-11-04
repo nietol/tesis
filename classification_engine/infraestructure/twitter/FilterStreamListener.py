@@ -16,6 +16,14 @@ class FilterStreamListener(tweepy.StreamListener):
         self.cuenta += 1
         print("inserted..." + str(self.cuenta))
 
+def filter(terms):
+    """Abre un stream y filtra los mensajes segùn la lista de términos."""
+
+    api = get_api()
+    myStreamListener = FilterStreamListener()
+    myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+    myStream.filter(track=terms, languages=['es'], locations=__ARGENTINA__)
+
 if __name__ == "__main__":
     api = get_api()
     myStreamListener = FilterStreamListener()

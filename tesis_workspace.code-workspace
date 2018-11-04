@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "classification_engine"
+		}
+	],
+	"settings": {
+		"python.pythonPath": "${workspaceFolder}/env/bin/python"
+	}
+}
