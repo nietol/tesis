@@ -25,7 +25,4 @@ def filter(terms):
     myStream.filter(track=terms, languages=['es'], locations=__ARGENTINA__)
 
 if __name__ == "__main__":
-    api = get_api()
-    myStreamListener = FilterStreamListener()
-    myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-    myStream.filter(track=['dolar'], languages=['es'], locations=__ARGENTINA__)
+    filter([])
