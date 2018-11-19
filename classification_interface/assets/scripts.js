@@ -21,11 +21,11 @@ function buscar() {
         for (var i in tweets) {
             // Add the circle for this city to the map.
             var cityCircle = new google.maps.Circle({
-                strokeColor: '#FF0000',
-                strokeOpacity: 0.8,
+                strokeColor: fillColor(tweets[i].polarity_level),
+                strokeOpacity: 1,
                 strokeWeight: 2,
-                fillColor: '#FF0000',
-                fillOpacity: 0.35,
+                fillColor: fillColor(tweets[i].polarity_level),
+                fillOpacity: 1,
                 map: mapArgentinaSVM,
                 center: {lat: tweets[i].geo.latitud, lng: tweets[i].geo.longitud},
                 radius: 100
@@ -33,3 +33,19 @@ function buscar() {
         }//end for
     });
 }
+
+function fillColor(polarity_level) {
+    let color = '#FF0000';
+
+    if (polarity_level == 0) { //ninguno
+        color = 'Green';
+    } else if (polarity_level == 1) {//positivo
+        color = 'Blue';
+    } else if (polarity_level == 2) {//negativo
+        color = 'Red';
+    } else if (polarity_level == 3) {//neutral
+        color = 'Yellow';
+    }
+
+    return color;
+}//end fillColor

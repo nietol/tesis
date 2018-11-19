@@ -3,8 +3,8 @@
 
 <head>
     <link rel="stylesheet" href="./assets/styles.css">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="./assets/scripts.js"></script>
 </head>
 
@@ -17,13 +17,16 @@
     <div class="row">
         <div class="col-3 menu">
             <ul>
-                <li><span>Términos</span>
+                <li>
+                    <span>Términos</span>
                     <input class="searchbox" type="text">
                 </li>
-                <li><span>Fecha Desde</span>
+                <li>
+                    <span>Fecha Desde</span>
                     <input type="date" id="fechaDesde" name="fecha-desde" value="2018-10-29">
                 </li>
-                <li><span>Fecha Hasta</span>
+                <li>
+                    <span>Fecha Hasta</span>
                     <input type="date" id="fechaHasta" name="fecha-desde" value="2018-10-30">
                 </li>
                 <li>
@@ -32,6 +35,44 @@
                 </li>
                 <li>
                     <input type="button" value="Buscar" onclick="buscar()">
+                </li>
+                <li>
+                    <span class="referencias">Referencias</span>
+                    <ul>
+                        <li>
+                            <input type="checkbox" id="polNinguno">
+                            <label for="polNinguno">Ninguno</label>
+                            <div class="ref-counter">
+                                <span class="dot dot-ninguno"></span>
+                                <span id="polCounterNinguno">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="polPositivo">
+                            <label for="polPositivo">Positivo</label>
+                            <div class="ref-counter">
+                                <span class="dot dot-positivo"></span>
+                                <span id="polCounterPositivo">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="polNegativo">
+                            <label for="polNegativo">Negativo</label>
+                            <div class="ref-counter">
+                                <span class="dot dot-negativo"></span>
+                                <span id="polCounterNegativo">0</span>    
+                            </div>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="polNeutral">
+                            <label for="polNeutral">Neutral</label>
+                            <div class="ref-counter">                                
+                                <span class="dot dot-neutral"></span>
+                                <span id="polCounterNeutral">0</span>                                
+                            </div>
+                        </li>
+                    </ul>
+
                 </li>
             </ul>
         </div>
@@ -44,4 +85,5 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-HmcqzaKXX5VPq_wmrPWRZxeAMQdQKZM&callback=mapsSetup"></script>
 </body>
+
 </html>

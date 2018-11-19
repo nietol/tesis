@@ -57,3 +57,39 @@ span {
 .searchbox {
     width: 100%;
 }
+
+.referencias {
+    margin: 10px;
+}
+
+.ref-counter {    
+    float: right;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-ninguno {
+    background-color: Green;
+}
+
+.dot-positivo {
+    background-color: Blue;
+}
+
+.dot-negativo {
+    background-color: Red;
+}
+
+.dot-neutral {
+    background-color: Yellow;
+}
+
+span[id^="polCounter"] {
+    display: inline-block;
+}
