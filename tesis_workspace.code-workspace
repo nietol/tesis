@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "classification_engine"
+		},
+		{
+			"path": "classification_interface"
 		}
 	],
 	"settings": {

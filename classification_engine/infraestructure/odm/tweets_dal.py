@@ -23,7 +23,13 @@ def insert_one(tweet):
     return inserted_id
 
 def find(filter):
-    """Busca documentos dentro de la colección tweets filtrados según filter."""
+    """Busca documentos dentro de la colección tweets filtrados según filter.
+    
+    Parameters:
+        filter: filtro de bùsqueda.
+    Returns:
+        cursor: A cursor / iterator over Mongo query results.
+    """
 
     tc = _get_tweets_collection()
     cursor = tc.find(filter)

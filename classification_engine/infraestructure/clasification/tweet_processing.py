@@ -6,7 +6,7 @@ Clasificación y procesamiento de localización.
 import classification_engine.infraestructure.odm.raw_tweets_dal as raw_tweets_dal
 import classification_engine.infraestructure.odm.tweets_dal as tweets_dal
 #from ..odm.raw_tweets_dal import find, update_one
-from bson import json_util
+#from bson import json_util
 from dateutil import parser
 
 from ...domain.Tweet import Tweet, GeoPoint

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="./assets/styles.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <script src="./assets/scripts.js"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        Visualización de clasificación de tweets según polaridad
+    </div>
+
+    <div class="row">
+        <div class="col-3 menu">
+            <ul>
+                <li><span>Términos</span>
+                    <input class="searchbox" type="text">
+                </li>
+                <li><span>Fecha Desde</span>
+                    <input type="date" id="fechaDesde" name="fecha-desde" value="2018-10-29">
+                </li>
+                <li><span>Fecha Hasta</span>
+                    <input type="date" id="fechaHasta" name="fecha-desde" value="2018-10-30">
+                </li>
+                <li>
+                    <input type="checkbox" id="realTime" name="realTime">
+                    <label for="realTime">Real Time</label>
+                </li>
+                <li>
+                    <input type="button" value="Buscar" onclick="buscar()">
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-9">
+            <div id="mapArgentinaSVM" style="width:100%;height:500px;margin:auto;"></div>
+            <!--<div id="mapArgentinaNaive" style="width:48%;height:500px; float:right"></div>-->
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-HmcqzaKXX5VPq_wmrPWRZxeAMQdQKZM&callback=mapsSetup"></script>
+</body>
+</html>
