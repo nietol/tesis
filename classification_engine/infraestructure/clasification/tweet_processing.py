@@ -15,8 +15,8 @@ from .polarity_predictor import predict
 def procesar():
     """Procesa tweets marcados como no procesados"""
 
-    # filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }
-    filter = { "geo": {"$ne": None} }
+    filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }
+    # filter = { "geo": {"$ne": None} }
     no_procesados = raw_tweets_dal.find(filter)
 
     print(no_procesados.count())

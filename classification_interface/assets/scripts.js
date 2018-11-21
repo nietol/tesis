@@ -24,6 +24,14 @@ $(document).ready(function () {
         let elem = $(this);
         updateMarkers(elem.attr('name'), elem.is(':checked'));
     });
+
+    $('#realTime').change(function(evt) {
+        let checked = $(this).prop('checked')
+        $('#searchBox').prop('disabled', !checked);
+        $('input[type=date]').prop('disabled', checked);
+    });
+    
+    $('#realTime').change();
 });
 
 function mapsSetup() {
@@ -69,12 +77,10 @@ function resetMapMarkers() {
 }//end resetMapMarkers
 
 function buscar() {
-    var fechaDesde = 0;
-    var fechaHasta = 0;
+    let fechaDesde = $('#fechaDesde').val() + '-UTC';
+    let fechaHasta = $('#fechaHasta').val() + '-UTC';
 
-    //var url = 'http://127.0.0.1:8000/tweets/${fechaDesde}/${fechaHasta}'
-
-    var url = 'http://127.0.0.1:8000/tweets/2018-10-29-UTC/2018-10-30-UTC';
+    var url = 'http://127.0.0.1:8000/tweets/' + fechaDesde + '/' + fechaHasta;
 
     $.getJSON(url, function (tweets) {        
         
@@ -90,6 +96,8 @@ function buscar() {
         */
 
         $(document).trigger(constants.newTweetsEvt);
+        $(document).trigger(constants.newRefCounts);
+        $(':checkbox').change();
     });
 }
 
@@ -117,9 +125,6 @@ function drawTweets() {
 
         tweet.en_mapa = true;
     });
-
-    $(':checkbox').change();
-    $(document).trigger(constants.newRefCounts);
 }//end drawTweets
 
 function drawRefCounts() {

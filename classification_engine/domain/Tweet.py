@@ -2,6 +2,7 @@ from enum import Enum, IntEnum
 from ..infraestructure.clasification.text_processing import tokenize
 
 import copy
+import time
 
 class GeoPoint:
 
@@ -35,6 +36,7 @@ class Tweet:
         self.date = date        
         self.polarity_level = polarity_level
         self.geo = geo
+        self.timestamp = int(time.time())
 
     @property
     def tokenized_content(self):
