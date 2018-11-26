@@ -22,6 +22,6 @@ tweets = tweets.TweetsResource()
 rt_tweets = realtimetweets.RealtimeTweetsResource()
 classify = classifications.ClassificationsResource()
 
-app.add_route('/tweets/{fechaDesde:dt("%Y-%m-%d-%Z")}/{fechaHasta:dt("%Y-%m-%d-%Z")}', tweets)
+app.add_route('/tweets/{fechaDesde:dt("%Y-%m-%dT%H:%M-UTC%z")}/{fechaHasta:dt("%Y-%m-%dT%H:%M-UTC%z")}', tweets)
 app.add_route('/realtimetweets/{timestamp:int}', rt_tweets)
 app.add_route('/classifications', classify)

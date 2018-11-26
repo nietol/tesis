@@ -27,7 +27,7 @@
 }
 
 html {
-    font-family: "Lucida Sans", sans-serif;
+    font-family: "Courier New", Courier, monospace;
 }
 .header {
     background-color: #9933cc;
@@ -92,4 +92,8 @@ li span {
 
 span[id^="polCounter"] {
     display: inline-block;
+}
+
+tr.highlight td.jsgrid-cell {
+    background-color: #33b5e5;
 }

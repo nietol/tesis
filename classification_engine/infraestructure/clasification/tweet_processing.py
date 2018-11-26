@@ -21,17 +21,12 @@ class Proceso:
             Parámetros:                
                 async: bool, default False.
         """        
-        self.async = async
-        self.geolocalizar = False
+        self.async = async        
         self.running = False
         self._thread = None
 
-    def start(self, geolocalizar = True):
-        """Inicia el procesamiento de los tweets.
-            Parámetros:
-                geolocalizar: bool, default True. Se deben geolicalizar los tweets?
-        """
-        self.geolocalizar = geolocalizar
+    def start(self):
+        """Inicia el procesamiento de los tweets."""        
 
         if not self.running:
             self.running = True
@@ -48,9 +43,8 @@ class Proceso:
     def _procesar(self):
         """Procesa tweets marcados como no procesados"""
 
-        filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }
-        if not self.geolocalizar:
-            filter = { "procesado": { "$exists": False } }
+        #filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }        
+        filter = { "procesado": { "$exists": False } }
 
         while self.running:            
             
@@ -67,7 +61,7 @@ class Proceso:
             for data in no_procesados:
                 polarity = predict(data['text'])                
 
-                if self.geolocalizar:
+                if data['coordinates'] is not None:
                     geo = GeoPoint(data['coordinates']['coordinates'][1],
                         data['coordinates']['coordinates'][0])
                 else:

@@ -35,7 +35,7 @@ class ClassificationsResource:
         if not self.started:            
             self.started_at = int(time.time() * 1000)
             __stream__.start(terms, geolocalizar)
-            __proceso__.start(geolocalizar)
+            __proceso__.start()
             self.started = True
         
         response_body = { 'started_at': self.started_at }
