@@ -24,7 +24,7 @@ class PolarityLevel(IntEnum):
 class Tweet:
     u"""Abtracción de un tweet."""
 
-    def __init__(self, tweet_id, user, content, date, polarity_level, geo):
+    def __init__(self, tweet_id, user, content, date, polarity_level, geo, timestamp_ms):
         """Constructor. Setea todos los valores propios de un tweet.
         params
             polarity_level: PolarityLevel
@@ -36,7 +36,7 @@ class Tweet:
         self.date = date        
         self.polarity_level = polarity_level
         self.geo = geo
-        self.timestamp = int(time.time())
+        self.timestamp_ms = timestamp_ms
 
     @property
     def tokenized_content(self):
@@ -56,7 +56,7 @@ class Tweet:
 
         data = copy.deepcopy(vars(self))
 
-        data['geo'] = self.geo.to_dict()
+        data['geo'] = self.geo.to_dict() if self.geo is not None else None
         data['polarity_str'] = self.polarity
         data['tokenized_content'] = self.tokenized_content
 

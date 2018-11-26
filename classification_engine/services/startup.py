@@ -5,6 +5,7 @@ from falcon.http_status import HTTPStatus
 
 from classification_engine.services import tweets
 from classification_engine.services import realtimetweets
+from classification_engine.services import classifications
 
 class HandleCORS(object):
     def process_request(self, req, resp):
@@ -19,6 +20,8 @@ app = falcon.API(middleware=[HandleCORS()])
 
 tweets = tweets.TweetsResource()
 rt_tweets = realtimetweets.RealtimeTweetsResource()
+classify = classifications.ClassificationsResource()
 
 app.add_route('/tweets/{fechaDesde:dt("%Y-%m-%d-%Z")}/{fechaHasta:dt("%Y-%m-%d-%Z")}', tweets)
 app.add_route('/realtimetweets/{timestamp:int}', rt_tweets)
+app.add_route('/classifications', classify)

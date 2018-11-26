@@ -14,7 +14,8 @@ class FilterStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         insert_one(status._json)
         self.cuenta += 1
-        print("inserted..." + str(self.cuenta))
+        if self.cuenta % 100 == 0:
+            print("inserted..." + str(self.cuenta))
 
 class Stream:
     """Stream hacia twitter streaming api."""
@@ -22,15 +23,26 @@ class Stream:
     def __init__(self, async = False):
         self._async = async
         self.running = False
+        self._stream = None
 
-    def start(self, terms):
-        """Abre un stream y filtra los mensajes segùn la lista de términos."""
+    def start(self, terms, geolocalizar = True):
+        """Abre un stream y filtra los mensajes según la lista de términos.
+            Parámetros:
+                terms: lista de términos.
+                geolocalizar: bool, default True. Se deben geolicalizar los tweets?            
+            Los parámetros son excluyentes. O buscamos por términos o buscamos geolocalizarlos.
+        """
 
         if not self.running:            
             api = get_api()
             myStreamListener = FilterStreamListener()
             self._stream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-            self._stream.filter(track=terms, languages=['es'], locations=__ARGENTINA__, async=self._async)
+
+            if geolocalizar:
+                self._stream.filter(languages=['es'], locations=__ARGENTINA__, async=self._async)
+            else:
+                self._stream.filter(track=terms, languages=['es'], async=self._async)
+
             self.running = True
 
     def stop(self):

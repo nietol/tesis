@@ -17,7 +17,7 @@ class RealtimeTweetsResource:
 
         tweets = []
 
-        cursor = tweets_dal.find({'timestamp': {'$gte': timestamp}})
+        cursor = tweets_dal.find({'timestamp_ms': {'$gte': timestamp}})
 
         for tweet in cursor:
             tweets.append(tweet)

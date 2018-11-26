@@ -16,9 +16,24 @@ var globalData =
         }
     };
 
-$(document).ready(function () {
-    $(document).on(constants.newTweetsEvt, function () { drawTweets(); })
-    $(document).on(constants.newTweetsEvt, function () { drawRefCounts(); })
+function Tweet(tdata) {
+    for (var key in tdata) {
+        this[key] = tdata[key];
+    }
+    
+    this.date_string = new Date(tdata.date.$date).toLocaleString();
+    this.tc_string = tdata.tokenized_content.join(',');
+}//end Tweet constructor
+
+$(document).ready(function () {    
+    let today = new Date();
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    $('#fechaDesde').val(today.toISOString().substring(0, 10));
+    $('#fechaHasta').val(tomorrow.toISOString().substring(0, 10));
+
+    $(document).on(constants.newTweetsEvt, function () { drawTweets(); gridSetup(); })
+    $(document).on(constants.newRefCounts, function () { drawRefCounts(); })
 
     $(':checkbox').change(function(evt) {
         let elem = $(this);
@@ -33,6 +48,61 @@ $(document).ready(function () {
     
     $('#realTime').change();
 });
+
+function buscar() {
+    let fechaDesde = $('#fechaDesde').val() + '-UTC';
+    let fechaHasta = $('#fechaHasta').val() + '-UTC';
+
+    var url = 'http://127.0.0.1:8000/tweets/' + fechaDesde + '/' + fechaHasta;
+
+    $.getJSON(url, function (tweets) {        
+        
+        resetMapMarkers();
+        globalData.tweets = [];
+        //globalData.tweets = tweets;  
+
+        $.each(tweets, function (i, tdata) {
+            globalData.tweets.push(new Tweet(tdata));
+        });
+
+        //si real team, hago push, sino, reemplazo la coleccion.
+        //En real time no se resetean las cuentas, sino que se actualizan
+        /*
+        $.each(tweets, function (i, tweet) {
+            globalData.tweets.push(tweet);            
+        });
+        */
+
+        $(document).trigger(constants.newTweetsEvt);
+        $(document).trigger(constants.newRefCounts);
+        $(':checkbox').change();
+    });
+}
+
+function gridSetup() {
+    $("#tweetsGrid").jsGrid({
+        width: "100%",
+        height: "400px",
+
+        filtering: true,                
+        sorting: true,
+        paging: true,
+        pageButtonCount: 11,
+        pageSize: 50,
+ 
+        data: globalData.tweets,
+ 
+        fields: [
+            { title: "Fecha", name: "date_string", type: "text", width: "15%" },
+            { title: "En mapa", name: "with_marker", type: "checkbox", width: "5%" },
+            { title: "Sentimiento", name: "polarity_str", type: "text", width: "10%" },
+            { title: "Tweet", name: "content", type: "text", width: "35%" },
+            { title: "Tokens", name: "tc_string", type: "text", width: "35%" }            
+        ]
+    });    
+}
+
+//Map related funcions
 
 function mapsSetup() {
     var mapProp = {
@@ -76,38 +146,13 @@ function resetMapMarkers() {
 
 }//end resetMapMarkers
 
-function buscar() {
-    let fechaDesde = $('#fechaDesde').val() + '-UTC';
-    let fechaHasta = $('#fechaHasta').val() + '-UTC';
-
-    var url = 'http://127.0.0.1:8000/tweets/' + fechaDesde + '/' + fechaHasta;
-
-    $.getJSON(url, function (tweets) {        
-        
-        resetMapMarkers();
-        globalData.tweets = tweets;  
-
-        //si real team, hago push, sino, reemplazo la coleccion.
-        //En real time no se resetean las cuentas, sino que se actualizan
-        /*
-        $.each(tweets, function (i, tweet) {
-            globalData.tweets.push(tweet);            
-        });
-        */
-
-        $(document).trigger(constants.newTweetsEvt);
-        $(document).trigger(constants.newRefCounts);
-        $(':checkbox').change();
-    });
-}
-
 //Dibuja los puntos en el mapa, actualiza la cuenta de referencias y realiza
 //el trigger del evento que indica que hay nuevos valores de cuenta de referencias.
 function drawTweets() {
 
     $.each(globalData.tweets, function (i, tweet) {
 
-        if (!tweet.en_mapa) {
+        if (tweet.geo != null && !tweet.with_marker) {
 
             var circle = new google.maps.Circle({
                 strokeColor: fillColor(tweet.polarity_level),
@@ -116,14 +161,14 @@ function drawTweets() {
                 fillColor: fillColor(tweet.polarity_level),
                 fillOpacity: 1,
                 map: null, //globalData.map,
-                center: { lat: tweet.geo.latitud, lng: tweet.geo.longitud },
+                center:  { lat: tweet.geo.latitud, lng: tweet.geo.longitud },
                 radius: 100
             });
 
-            globalData.mapMarkers[tweet.polarity_str].push(circle);            
-        }//end if       
+            globalData.mapMarkers[tweet.polarity_str].push(circle);
+            tweet.with_marker = true;
+        }//end if
 
-        tweet.en_mapa = true;
     });
 }//end drawTweets
 
@@ -156,3 +201,5 @@ function fillColor(polarity_level) {
 
     return color;
 }//end fillColor
+
+//End Map related funcions

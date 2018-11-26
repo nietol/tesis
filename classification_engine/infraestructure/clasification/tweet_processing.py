@@ -18,15 +18,21 @@ class Proceso:
 
     def __init__(self, async = False):
         """Constructor.
-            Params:
-                async, default false.
-        """
+            Parámetros:                
+                async: bool, default False.
+        """        
         self.async = async
+        self.geolocalizar = False
         self.running = False
         self._thread = None
 
-    def start(self):
-        """Inicia el procesamiento de los tweets."""
+    def start(self, geolocalizar = True):
+        """Inicia el procesamiento de los tweets.
+            Parámetros:
+                geolocalizar: bool, default True. Se deben geolicalizar los tweets?
+        """
+        self.geolocalizar = geolocalizar
+
         if not self.running:
             self.running = True
             if self.async:
@@ -42,27 +48,38 @@ class Proceso:
     def _procesar(self):
         """Procesa tweets marcados como no procesados"""
 
-        while self.running:
-            filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }            
-            no_procesados = raw_tweets_dal.find(filter)
+        filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }
+        if not self.geolocalizar:
+            filter = { "procesado": { "$exists": False } }
+
+        while self.running:            
             
-            print('cuenta...')
-            print(no_procesados.collection.count_documents(filter))
-            if no_procesados.count() > 0:         
-                print("Cantidad de tweets a procesar: " + str(no_procesados.count()))
+            no_procesados = raw_tweets_dal.find(filter)   
+            
+            a_procesar = no_procesados.collection.count_documents(filter)
+            if a_procesar > 0:         
+                print("Cantidad de tweets a procesar: " + str(a_procesar))
             else:
                 print("Sin tweets a procesar... ")
                 sleep(45)
+                continue
 
             for data in no_procesados:
-                polarity = predict(data['text'])
-                geo = GeoPoint(data['coordinates']['coordinates'][1],
-                    data['coordinates']['coordinates'][0])
+                polarity = predict(data['text'])                
+
+                if self.geolocalizar:
+                    geo = GeoPoint(data['coordinates']['coordinates'][1],
+                        data['coordinates']['coordinates'][0])
+                else:
+                    geo = None
                 
                 tweet_date = parser.parse(data['created_at'])
+                tweet_timestamp = int(data['timestamp_ms'])
 
+                #pylint: disable-msg=too-many-arguments
                 tweet = Tweet(data['id'], data['user']['screen_name'],
-                    data['text'], tweet_date, polarity, geo)
+                    data['text'], tweet_date, polarity, geo, tweet_timestamp)
+                #pylint: enable-msg=too-many-arguments  
 
                 tweets_dal.insert_one(tweet)
                 data['procesado'] = True
