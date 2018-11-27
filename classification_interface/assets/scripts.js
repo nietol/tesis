@@ -1,4 +1,7 @@
-var glb_polling = true;
+var polling = {
+    running: false,
+    interval: 90000
+}
 
 var constants =
     {
@@ -75,23 +78,30 @@ $(document).ready(function () {
     $('#btnFind').click(function() { 
         findTweets();
     });
+
+    $(document).ajaxStart(function() {
+        $('.loading-overlay').show();     
+    });
+    $(document).ajaxStop(function() {
+        $('.loading-overlay').hide();     
+    });    
 });
 
 //Busqueda de histórico y lectura en tiemp real
 
 function startPolling(started_at) {
-    let url = endpoints.realtimetweets + '/' + started_at.toString();
-    searchForTweets(url);
+    if (polling.running) {
+        let url = endpoints.realtimetweets + '/' + started_at.toString();
+        searchForTweets(url);
 
-    if (glb_polling) {
         setTimeout(function() {
             startPolling(started_at);
-        }, 10000);
-    }
-}
+        }, polling.interval);
+    }//end if
+}//end startPolling
 
 function stopPolling() {
-    glb_polling = false;
+    polling.running = false;
 }
 
 function onRealTimeStarted(started_at) {
@@ -106,7 +116,7 @@ function onRealTimeStarted(started_at) {
 
     $('#searchBox').prop('disabled', true);
 
-    glb_polling = true;
+    polling.running = true;
     startPolling(started_at);
 }
 
@@ -138,10 +148,13 @@ function findTweets() {
 //Inicia la lectura de tweets en tiempo real.
 function startRealTime() {
 
+    var terminos = $('#searchBox').val();    
+    var arrayTerminos = terminos ? terminos.split(',') : [];
+
     let started_at = 0;
     let url = endpoints.classifications;
 
-    $.post(url, function(data) {
+    $.post(url, JSON.stringify(arrayTerminos), function(data) {
         started_at = data.started_at;
         $(document).trigger(constants.realTimeStartedEvt, started_at);
     });
@@ -162,7 +175,7 @@ function stopRealTime() {
 function buscarHistorico() {
     let fechaDesde = $('#fechaDesde').val() + "-UTC-0300";
     let fechaHasta = $('#fechaHasta').val() + "-UTC-0300";
-
+    
     var url = endpoints.tweets + '/' + fechaDesde + '/' + fechaHasta;
     searchForTweets(url);
 }
@@ -171,7 +184,7 @@ function searchForTweets(url) {
     $.getJSON(url, function (tweets) {    
         
         resetMapMarkers();
-        globalData.tweets = [];
+        resetTweets();        
 
         $.each(tweets, function (i, tdata) {
             globalData.tweets.push(new Tweet(tdata));
@@ -273,12 +286,16 @@ function resetMapMarkers() {
         markers.length = 0;
     }
 
-    for (var prop in globalData.notInMap) {
-        let tweets = globalData.mapMarkers[prop];
-        tweets.length = 0;
-    }
-
 }//end resetMapMarkers
+
+function resetTweets() {
+    globalData.tweets.length = 0;
+
+    for (var prop in globalData.notInMap) {
+        let tweets = globalData.notInMap[prop];
+        tweets.length = 0;
+    }    
+}//end resetTweets
 
 //Dibuja los puntos en el mapa, actualiza la cuenta de referencias y realiza
 //el trigger del evento que indica que hay nuevos valores de cuenta de referencias.
@@ -286,7 +303,7 @@ function drawTweets() {
 
     $.each(globalData.tweets, function (i, tweet) {
 
-        if (tweet.geo != null && !tweet.map_marker) {
+        if (tweet.geo && !tweet.map_marker) {
 
             var circle = new google.maps.Circle({
                 strokeColor: fillColor(tweet.polarity_level),
@@ -303,7 +320,7 @@ function drawTweets() {
             tweet.map_marker = circle;
         }//end if
 
-        if (tweet.geo == null) {
+        if (!tweet.geo) {
             globalData.notInMap[tweet.polarity_str].push(tweet);
         }
     });
@@ -317,15 +334,29 @@ function onNewTweets() {
 function onNewRefCounts() {
     
     let separador = ' de ';
-    let ninguno = globalData.mapMarkers.ninguno.length.toString() + separador +  globalData.notInMap.ninguno.length.toString();
-    let positivo = globalData.mapMarkers.positivo.length.toString() + separador +  globalData.notInMap.positivo.length.toString();
-    let negativo = globalData.mapMarkers.negativo.length.toString() + separador +  globalData.notInMap.negativo.length.toString();
-    let neutral = globalData.mapMarkers.neutral.length.toString() + separador +  globalData.notInMap.neutral.length.toString();
+
+    let markerNinguno = globalData.mapMarkers.ninguno.length;
+    let markerPositivo = globalData.mapMarkers.positivo.length;
+    let markerNegativo = globalData.mapMarkers.negativo.length;
+    let markerNeutral = globalData.mapMarkers.neutral.length;
+
+    let totalNinguno = markerNinguno + globalData.notInMap.ninguno.length;
+    let totalPositivo = markerPositivo + globalData.notInMap.positivo.length;
+    let totalNegativo = markerNegativo + globalData.notInMap.negativo.length;
+    let totalNeutral = markerNeutral + globalData.notInMap.neutral.length;
+
+    let totalTweets = totalNinguno + totalPositivo + totalNegativo + totalNeutral;
+
+    let ninguno = markerNinguno.toString()  + separador +  totalNinguno.toString();
+    let positivo = markerPositivo.toString() + separador +  totalPositivo.toString();
+    let negativo = markerNegativo.toString() + separador +  totalNegativo.toString();
+    let neutral = markerNeutral.toString() + separador +  totalNeutral.toString();
 
     $('#polCounterNinguno').text(ninguno);
     $('#polCounterPositivo').text(positivo);
     $('#polCounterNegativo').text(negativo);
     $('#polCounterNeutral').text(neutral);
+    $('#polCounterTotal').text(totalTweets);
     
     $('#ulReferencias :checkbox').change();
 }//end drawRefCounts

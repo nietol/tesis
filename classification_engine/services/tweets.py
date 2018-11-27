@@ -18,12 +18,14 @@ class TweetsResource:
         """
         tweets = []
 
-        cursor = tweets_dal.find({
-            'date': {'$gte': fechaDesde, '$lte': fechaHasta}
-        })        
+        filter = { 'date': {'$gte': fechaDesde, '$lte': fechaHasta} }
+        cursor = tweets_dal.find(filter) 
 
         for tweet in cursor:
             tweets.append(tweet)
         
         resp.status = falcon.HTTP_200        
         resp.body = json_util.dumps(tweets, json_options=json_util.RELAXED_JSON_OPTIONS)
+
+        count = cursor.collection.count_documents(filter)
+        print('Tweets count: ' + str(count))

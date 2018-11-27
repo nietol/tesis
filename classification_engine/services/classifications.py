@@ -19,14 +19,14 @@ class ClassificationsResource:
         self.started_at = 0        
 
     def on_post(self, req, resp):
-        """Inicia clasificaciòn de tweets en tiempo real. Filtra los mensajes según terms.
+        """Inicia clasificación de tweets en tiempo real. Filtra los mensajes según terms.
             POST Data:
                 Array(String) => Lista de términos.
         """
         
         raw_data = req.bounded_stream.read()
         terms = []
-
+        
         if raw_data:
             terms = json_util.loads(raw_data.decode("utf-8"), json_options=json_util.RELAXED_JSON_OPTIONS)
 
@@ -37,10 +37,13 @@ class ClassificationsResource:
             __stream__.start(terms, geolocalizar)
             __proceso__.start()
             self.started = True
+            print('Classification started. Started at: ' + str(self.started_at))
+        else:
+            print('Classification already started. Started at: ' + str(self.started_at))
         
         response_body = { 'started_at': self.started_at }
         resp.status = HTTP_ACCEPTED
-        resp.body = json_util.dumps(response_body, json_options=json_util.RELAXED_JSON_OPTIONS)
+        resp.body = json_util.dumps(response_body, json_options=json_util.RELAXED_JSON_OPTIONS)        
 
     def on_put(self, req, resp):
         """Si está ejecutando, detiene la clasificación en tiempo real de tweets.
@@ -49,6 +52,7 @@ class ClassificationsResource:
         __proceso__.stop()
         self.started = False        
         resp.status = HTTP_ACCEPTED
+
         print('Classification stoped')
 
 if __name__ == "__main__":

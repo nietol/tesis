@@ -42,8 +42,7 @@ class Proceso:
 
     def _procesar(self):
         """Procesa tweets marcados como no procesados"""
-
-        #filter = { "procesado": { "$exists": False } , "geo": {"$ne": None} }        
+        
         filter = { "procesado": { "$exists": False } }
 
         while self.running:            
@@ -52,7 +51,7 @@ class Proceso:
             
             a_procesar = no_procesados.collection.count_documents(filter)
             if a_procesar > 0:         
-                print("Cantidad de tweets a procesar: " + str(a_procesar))
+                print("Cantidad de tweets a procesar: " + str(a_procesar))                
             else:
                 print("Sin tweets a procesar... ")
                 sleep(45)
