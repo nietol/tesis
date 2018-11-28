@@ -47,7 +47,7 @@ class Proceso:
 
         while self.running:            
             
-            no_procesados = raw_tweets_dal.find(filter)   
+            no_procesados = raw_tweets_dal.find(filter)
             
             a_procesar = no_procesados.collection.count_documents(filter)
             if a_procesar > 0:         
@@ -58,6 +58,10 @@ class Proceso:
                 continue
 
             for data in no_procesados:
+
+                if 'procesado' in data and data['procesado']:
+                    continue
+
                 polarity = predict(data['text'])                
 
                 if data['coordinates'] is not None:
