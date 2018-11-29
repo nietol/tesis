@@ -32,12 +32,26 @@ class KFoldValidator:
         target = self.data_frame['polarity'].values
 
         # Split the dataset in two equal parts
-        X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.33, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.20, random_state=42)
 
         #[0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5]
-        parameters = {'classifier__kernel':['linear'], 'classifier__C':[0.1, 0.25, 0.5, 0.75, 1]}
+        param_c = [2**i for i in range(-5, 15)]
+        param_gamma = [2**i for i in range(-15, 3)]
+
+        parameters = \
+        [
+            {
+                'classifier__kernel': ['linear'],
+                'classifier__C': param_c
+            },
+            {
+                'classifier__kernel': ['rbf'],
+                'classifier__C': param_c,
+                'classifier__gamma': param_gamma
+            }
+        ]
         # parameters = {'classifier__C':[1, 10]}
-        grid = GridSearchCV(self.model, cv=3, n_jobs=4, param_grid=parameters, scoring='f1_weighted')
+        grid = GridSearchCV(self.model, cv=5, n_jobs=-1, param_grid=parameters, scoring='f1_weighted', verbose=999)
 
         #fit model
         grid.fit(X_train, y_train)
@@ -72,4 +86,6 @@ if __name__ == "__main__":
 
     kernel_value = params['classifier__kernel']
     c_value = str(params['classifier__C'])
-    # save_model(best_estimator, 'MODELS/svm_model_' + kernel_value  + '_' + c_value)
+    gamma_value = str(params['classifier__gamma']) if 'classifier__gamma' in params else 'none'
+
+    save_model(best_estimator, 'MODELS/svm_model_' + kernel_value  + '_' + c_value + '_' + gamma_value)
