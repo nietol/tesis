@@ -5,15 +5,15 @@
 from sklearn.model_selection import KFold, cross_val_score, cross_val_predict, GridSearchCV, train_test_split
 from sklearn.metrics import precision_recall_fscore_support, make_scorer, classification_report, confusion_matrix
 
-class KFoldValidator:
-    """KFold Cross Validation"""
+class Validator:
+    """Models validations"""
 
     def __init__(self, model, data_frame):
         self.model = model
         self.data_frame = data_frame
     
-    def validate(self):
-        """KFold validation"""
+    def kfold_validation(self):
+        """KFold crooss validation"""
 
         data = self.data_frame['tweet'].values
         target = self.data_frame['polarity'].values
@@ -33,17 +33,12 @@ class KFoldValidator:
 
         # Split the dataset in two equal parts
         X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.20, random_state=42)
-
-        #[0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5]
-        param_c = [2**i for i in range(-5, 15)]
-        param_gamma = [2**i for i in range(-15, 3)]
+        
+        param_c = [2**i for i in [0.5, 0.75, 1, 1.25, 1.5]]
+        param_gamma = [2**i for i in [-3.5, -3.75, -3, -2.25, -2.5]]         
 
         parameters = \
         [
-            {
-                'classifier__kernel': ['linear'],
-                'classifier__C': param_c
-            },
             {
                 'classifier__kernel': ['rbf'],
                 'classifier__C': param_c,
@@ -77,8 +72,8 @@ if __name__ == "__main__":
     df = build_data_frame(training_tweets)
     model = build_model()
 
-    kfold = KFoldValidator(model, df)    
-    report, confusion, params, best_estimator = kfold.gird_serach_cv()
+    validator = Validator(model, df)    
+    report, confusion, params, best_estimator = validator.gird_serach_cv()
 
     print(report)
     print(confusion)

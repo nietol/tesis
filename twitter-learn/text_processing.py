@@ -72,6 +72,10 @@ def _is_email_address(cadena):
     match = re_obj.match(cadena)
     return match is not None
 
+def _remove_email_address(text):
+    re_obj = re.compile(E_MAIL_ADDRESS, re.VERBOSE | re.I | re.UNICODE)    
+    return re_obj.sub('', text)
+
 def _strip_hashtag(cadena):
     """Si la cadena es un hashtag, elimina el #."""
 
@@ -121,15 +125,45 @@ def tokenize(text):
 
     return stems
 
-# Convert a collection of text documents to a matrix of token counts
-'''
-vectorizer = CountVectorizer(
-    analyzer='word',
-    tokenizer=tokenize)
-'''
+def simple_classifier_tokenizer(input_text):
+    '''Genera la lista de palabras que maneja el clasificador SimpleClassifier.        
+    Al mensaje, tweet, se lo procesa de la siguiente manera:            
+        * Lower case words.
+        * Eliminar @user.
+        * Tratamiento signos de puntuación. Se remueven.
+        * Eliminar urls y emails.
+        * Replace #hashtag with hashtag (eliminate #).
+        * Remover stop words.     
+    '''
+
+    # remueve direcciones de emails
+    text = _remove_email_address(input_text)
+
+    # tokenize
+    # strip_handles: Remove Twitter username handles (@user) from text.        
+    # preserve_case: If it is set to False, then the tokenizer will downcase everything except for emoticons.
+    tweet_tokenize = TweetTokenizer(strip_handles=True, reduce_len=False, preserve_case=False)
+    tokens = tweet_tokenize.tokenize(text)
+
+    # remueve de todos los tokens los signos de puntiación
+    tokens = [_remover_signos_puntuacion(token) for token in tokens]
+    tokens = [token for token in tokens if token]
+
+    # remueve los tokens que son urls
+    tokens = [token for token in tokens if not (_is_url(token))]
+
+    # remueve # de los hashtags
+    tokens = [_strip_hashtag(token) for token in tokens]
+
+    # remueve stopwords
+    tokens = [token for token in tokens if not _is_stop_word(token)] 
+
+    return tokens
 
 if __name__ == "__main__":
-    text = 'casas firmando comiendo comer comidas comoda comodas compila compilación'
-    tokens = tokenize(text)
+    text = '#casas @leo. FirmaDO http://hola.com nieto.l@gmail.com de la nieto.l@gmail.ar comiendo comer comidas comoda comodas compila compilación'
+    #tokens = tokenize(text)
+    tokens = simple_classifier_tokenizer(text)    
+    print(tokens)
     for t in tokens:
         print(t)

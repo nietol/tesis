@@ -25,7 +25,7 @@ def build_model():
     """Genera modelo de predicciòn"""
 
     pipeline = Pipeline([
-        ('vectorizer',  CountVectorizer(lowercase=False, tokenizer=tokenize)),
+        ('vectorizer',  CountVectorizer(lowercase=False, tokenizer=tokenize, binary=True)),
         ('classifier',  SVC()) ])
         #('classifier',  LinearSVC()) ])
     
