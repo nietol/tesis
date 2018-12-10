@@ -21,8 +21,6 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 2. Restaurar dependencias: pip install -r freeze.pip
 3. Activar el ambiente: . env/bin/activate
 
-### Ejecución de classification_engine
-
 ### Configuraciones
 
 #### Backend - **classification_engine**
