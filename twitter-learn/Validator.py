@@ -34,8 +34,11 @@ class Validator:
         # Split the dataset in two equal parts
         X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.20, random_state=42)
         
-        param_c = [2**i for i in [0.5, 0.75, 1, 1.25, 1.5]]
-        param_gamma = [2**i for i in [-3.5, -3.75, -3, -2.25, -2.5]]         
+        #param_c = [2**i for i in [0.5, 0.75, 1, 1.25, 1.5]]
+        #param_gamma = [2**i for i in [-3.5, -3.75, -3, -2.25, -2.5]]         
+
+        param_c = [2 ** 1.5]
+        param_gamma = [2 ** -3.5]           
 
         parameters = \
         [
@@ -45,6 +48,14 @@ class Validator:
                 'classifier__gamma': param_gamma
             }
         ]
+
+        '''
+            {
+                'classifier__kernel': ['linear'],
+                'classifier__C': param_c
+            }        
+        '''
+
         # parameters = {'classifier__C':[1, 10]}
         grid = GridSearchCV(self.model, cv=5, n_jobs=-1, param_grid=parameters, scoring='f1_weighted', verbose=999)
 
