@@ -21,7 +21,7 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 2. Generar el ambiente: python3.5 -m venv env
 3. Restaurar dependencias: pip install -r freeze.pip
 4. Activar el ambiente: . env/bin/activate
-5. Establecesr las configuraciones necesarias.
+5. Establecer las configuraciones necesarias.
 
 ### Configuraciones
 
