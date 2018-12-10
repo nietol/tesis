@@ -35,7 +35,7 @@ ACCESS_TOKEN = "SETUP_KEY"
 ACCESS_TOKEN_SECRET = "SETUP_KEY"
 ```
 
-Por otro lado, la conexión a la base de datos se define dentro de los *DALs*
+Por otro lado, la conexión a la base de datos (MongoDB) se define dentro de los *DALs*
 
 * **./classification_engine/infraestructure/odm/raw_tweets_dal.py**
 * **./classification_engine/infraestructure/odm/tweets_dal.py**
