@@ -17,9 +17,11 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 
 #### Pasos para la generación del ambiente en los proyectos escritos en Python
 
-1. Generar el ambiente: python3.5 -m venv env
-2. Restaurar dependencias: pip install -r freeze.pip
-3. Activar el ambiente: . env/bin/activate
+1. Instalar Mongodb.
+2. Generar el ambiente: python3.5 -m venv env
+3. Restaurar dependencias: pip install -r freeze.pip
+4. Activar el ambiente: . env/bin/activate
+5. Establecesr las configuraciones necesarias.
 
 ### Configuraciones
 
