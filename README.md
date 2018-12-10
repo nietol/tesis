@@ -27,6 +27,38 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 
 #### Backend - **classification_engine**
 
+El backend se conecta a Twitter Streaming API. Es necesario establecer los keys que el servicio necesita. En el archivo **./classification_engine/infraestructure/twitter/authentication.py** se define el setup de estas keys...
+
+```python
+CONSUMER_KEY = "SETUP_KEY"
+CONSUMER_SECRET = "SETUP_KEY"
+
+ACCESS_TOKEN = "SETUP_KEY"
+ACCESS_TOKEN_SECRET = "SETUP_KEY"
+```
+
+Por otro lado, la conexión a la base de datos se define dentro de los *DALs*
+
+**./classification_engine/infraestructure/odm/raw_tweets_dal.py**
+**./classification_engine/infraestructure/odm/tweets_dal.py**
+
+```python
+def _get_database():
+    """Returns classification_data_store database."""
+
+    client = MongoClient('localhost', 27017)
+    db = client.classification_data_store
+    return db
+```
+
+Modificarlo acorde al setup de base de datos que se esté utilizando.
+
+##### Ejecución del backend
+
+El proyecto se desarrolló usando gunicorn como servidor web para hostear el backend. Para su ejecución ejecutar el siguiente comando, sobre el directorio padre a *classification_engine*:
+
+**gunicorn --reload --timeout 300 classification_engine.services.startup:app**
+
 #### Frontend - **classification_interface**
 
 1. En el archivo **.\classification_interface\assets\scripts.js** se encuentran definidos los endpoints que expone el backend y consuma la interfaz...
