@@ -13,7 +13,7 @@ Esta tesis se encuentra dividida en tres proyectos:
 
 Para los dos proyectos escritos en Python, para su ejecución, es necesario generar un ambiente con la versión 3.5 del intérprete. Por otro lado, cada uno tiene definido el archivo freeze.pip con sus dependencias. Una vez generado el ambiente y restauradas las dependencias, el siguiente paso es activar el ambiente y estamos listos para ejecutarlo.
 
-Por otro lado, **classification_interface** es un sitio web que se comunica mediante AJAX con el API que expone el backend, para su ejecución solo basta con abrirlo con un browser. Es necesario estar conectado a internet (por las dependencias en librerías como jquery y google maps). La versión del browser tiene que soportar el control **input datetime-local**
+En cuanto a **classification_interface**, se trata de un sitio web que se comunica mediante AJAX con el API que expone el backend, para su ejecución solo basta abrirlo con un browser. Es necesario estar conectado a internet (por las dependencias en librerías como jquery y google maps). La versión del browser tiene que soportar el control **input datetime-local**
 
 #### Pasos para la generación del ambiente en los proyectos escritos en Python
 
@@ -24,6 +24,27 @@ Por otro lado, **classification_interface** es un sitio web que se comunica medi
 ### Ejecución de classification_engine
 
 ### Configuraciones
+
+#### Backend - **classification_engine**
+
+#### Frontend - **classification_interface**
+
+1. En el archivo **.\classification_interface\assets\scripts.js** se encuentran definidos los endpoints que expone el backend y consuma la interfaz...
+
+```javascript
+var endpoints = {
+    tweets: 'http://127.0.0.1:8000/tweets',
+    classifications: 'http://127.0.0.1:8000/classifications',
+    realtimetweets: 'http://127.0.0.1:8000/realtimetweets'
+}
+```
+De realizarse algún cambio en el endpoind donde se hostean estos servicios es necesario replicarlo en esta configuración.
+
+2. En el archivo **.\classification_interface\index.html**, sobre el final, se encuentra la inyección de las dependencias de Google Maps JavaScript API. Modificar (**SETUP_KEY**) con la propia obtenida de Google Maps Platform.
+
+```html
+<script src="https://maps.googleapis.com/maps/api/js?key=SETUP_KEY&callback=mapsSetup"></script>
+```
 
 nltk stopwords download
 
