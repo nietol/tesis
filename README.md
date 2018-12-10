@@ -7,7 +7,7 @@
 
 Esta tesis se encuentra dividida en tres proyectos:
 
-*	twitter-learn: implementación de algoritmos orientados a generar el modelo de clasificación que utiliza el motor para clasificar los tweets en tiempo real. Se encuentra escrito en Python.
+* twitter-learn: implementación de algoritmos orientados a generar el modelo de clasificación que utiliza el motor para clasificar los tweets en tiempo real. Se encuentra escrito en Python.
 * classification_engine: implementación del backend que realiza la clasificación en tiempo real y expone API REST para ser consumida por el cliente. Se encuentra escrito en Python.
 * classification_interface: implementación del frontend. HTML + CSS + Javascript.
 
@@ -39,8 +39,8 @@ ACCESS_TOKEN_SECRET = "SETUP_KEY"
 
 Por otro lado, la conexión a la base de datos se define dentro de los *DALs*
 
-**./classification_engine/infraestructure/odm/raw_tweets_dal.py**
-**./classification_engine/infraestructure/odm/tweets_dal.py**
+* **./classification_engine/infraestructure/odm/raw_tweets_dal.py**
+* **./classification_engine/infraestructure/odm/tweets_dal.py**
 
 ```python
 def _get_database():
@@ -53,7 +53,7 @@ def _get_database():
 
 Modificarlo acorde al setup de base de datos que se esté utilizando.
 
-##### Ejecución del backend
+#### Ejecución del backend
 
 El proyecto se desarrolló usando gunicorn como servidor web para hostear el backend. Para su ejecución ejecutar el siguiente comando, sobre el directorio padre a *classification_engine*:
 
