@@ -17,11 +17,17 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 
 #### Pasos para la generación del ambiente en los proyectos escritos en Python
 
+0. Descargar el proyecto y descomprimirlo.
 1. Instalar Mongodb.
 2. Generar el ambiente: python3.5 -m venv env
-3. Restaurar dependencias: pip install -r freeze.pip
-4. Activar el ambiente: . env/bin/activate
-5. Establecer las configuraciones necesarias.
+3. Actualizar pip a su última versión: pip install --upgrade pip
+4. Activar el ambiente: . env/bin/activate (el ambiente se desactiva con deactivate)
+5. Restaurar dependencias: pip install -r freeze.pip
+6. Establecer las configuraciones necesarias.
+
+**Los pasos 2 a 5 y deben realizarse para cada uno de los proyecto, *twitter-learn* y *classification_engine*. Es decir, la generación del ambiente *para classification_engine* se hace dentro del directorio *./classification_engine* y de igual forma para *twitter-learn*, se genera dentro de su directorio, *./twitter-learn***
+
+***NOTA: Siempre trabajar en el ambiente correspondiente, si estamos cambiando de proyectos en una misma terminal, desactivar el ambiente actual y activarlo en el proyecto correspondiente.***
 
 ### Configuraciones
 
@@ -78,6 +84,3 @@ De realizarse algún cambio en el endpoind donde se hostean estos servicios es n
 <script src="https://maps.googleapis.com/maps/api/js?key=SETUP_KEY&callback=mapsSetup"></script>
 ```
 
-nltk stopwords download
-
-python -m nltk.downloader stopwords
