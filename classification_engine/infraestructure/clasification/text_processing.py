@@ -72,6 +72,10 @@ def _is_email_address(cadena):
     match = re_obj.match(cadena)
     return match is not None
 
+def _remove_email_address(text):
+    re_obj = re.compile(E_MAIL_ADDRESS, re.VERBOSE | re.I | re.UNICODE)    
+    return re_obj.sub('', text)
+
 def _strip_hashtag(cadena):
     """Si la cadena es un hashtag, elimina el #."""
 
@@ -93,8 +97,11 @@ def _stem_tokens(tokens):
 
     return stemmed
 
-def tokenize(text):
+def tokenize(input_text):
     """Convierte un texto en una lista de tokens."""
+
+    # remueve direcciones de emails
+    text = _remove_email_address(input_text)
 
     # tokenize
     # strip_handles: Remove Twitter username handles (@user) from text.
@@ -108,7 +115,7 @@ def tokenize(text):
     tokens = [token for token in tokens if token]
 
     # remueve los tokens que son urls o direcciones de email
-    tokens = [token for token in tokens if not (_is_url(token) or _is_email_address(token))]
+    tokens = [token for token in tokens if not (_is_url(token))]
 
     # remueve # de los hashtags
     tokens = [_strip_hashtag(token) for token in tokens]
@@ -121,15 +128,3 @@ def tokenize(text):
 
     return stems
 
-# Convert a collection of text documents to a matrix of token counts
-'''
-vectorizer = CountVectorizer(
-    analyzer='word',
-    tokenizer=tokenize)
-'''
-
-if __name__ == "__main__":
-    text = 'casas firmando comiendo comer comidas comoda comodas compila compilación'
-    tokens = tokenize(text)
-    for t in tokens:
-        print(t)

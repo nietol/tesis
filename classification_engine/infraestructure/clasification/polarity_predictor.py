@@ -22,13 +22,9 @@ def predict(tweet_text):
 
 def __load_model():
     base_path = os.path.abspath(os.path.dirname(__file__))
-    file_name = os.path.join(base_path, "estimators/svm_model_linear_0.25")
+    file_name = os.path.join(base_path, "estimators/svm_model_rbf")
     return joblib.load(file_name)
 
-if __name__ == "__main__":
-    print(predict('bueno'))
-    print(predict('malo'))
-    print(predict('si no tal vez'))
 
     
     
