@@ -7,9 +7,9 @@
 
 Esta tesis se encuentra dividida en tres proyectos:
 
-* twitter-learn: implementación de algoritmos orientados a generar el modelo de clasificación que utiliza el motor para clasificar los tweets en tiempo real. Se encuentra escrito en Python.
-* classification_engine: implementación del backend que realiza la clasificación en tiempo real y expone API REST para ser consumida por el cliente. Se encuentra escrito en Python.
-* classification_interface: implementación del frontend. HTML + CSS + Javascript.
+* **twitter-learn**: implementación de algoritmos orientados a generar el modelo de clasificación que utiliza el motor para clasificar los tweets en tiempo real. Se encuentra escrito en Python.
+* **classification_engine**: implementación del backend que realiza la clasificación en tiempo real y expone API REST para ser consumida por el cliente. Se encuentra escrito en Python.
+* **classification_interface**: implementación del frontend. HTML + CSS + Javascript.
 
 Para los dos proyectos escritos en Python, para su ejecución, es necesario generar un ambiente con la versión 3.5 del intérprete. Por otro lado, cada uno tiene definido el archivo freeze.pip con sus dependencias. Una vez generado el ambiente y restauradas las dependencias, el siguiente paso es activar el ambiente y estamos listos para ejecutarlo.
 
@@ -20,8 +20,8 @@ En cuanto a **classification_interface**, se trata de un sitio web que se comuni
 0. Descargar el proyecto y descomprimirlo.
 1. Instalar Mongodb.
 2. Generar el ambiente: python3.5 -m venv env
-3. Actualizar pip a su última versión: pip install --upgrade pip
-4. Activar el ambiente: . env/bin/activate (el ambiente se desactiva con deactivate)
+3. Activar el ambiente: . env/bin/activate (el ambiente se desactiva con deactivate)
+4. Actualizar pip a su última versión: pip install --upgrade pip
 5. Restaurar dependencias: pip install -r freeze.pip
 6. Establecer las configuraciones necesarias.
 
